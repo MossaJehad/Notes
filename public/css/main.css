@@ -78,6 +78,17 @@ h1, h2, h3, h4, h5, h6
     --bs-gradient: none;
 }
 
+@media (min-width: 1200px) {
+    .home
+    {
+        background: 
+        url(../img/human-1.svg) left bottom no-repeat,
+        url(../img/human-2.svg) right bottom no-repeat,
+        url(../img/noise-bg.png) left top no-repeat,
+        var(--background-color)
+    }
+}
+
 .home-title::before
 {
     content: url(../img/stars.svg);
