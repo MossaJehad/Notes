@@ -12,7 +12,7 @@ body
     color: var(--bs-primary-rgb);
     font-weight: 300;
     font-size: 1.2rem;
-    background-image: url(../img/noise-bg.png);
+    background-image: url(../img/noise-bg.svg);
 }
 
 h1, h2, h3, h4, h5, h6
@@ -79,16 +79,23 @@ h1, h2, h3, h4, h5, h6
 }
 
 @media (min-width: 1200px) {
-    .home
-    {
+    .home {
         background: 
         url(../img/human-1.svg) left bottom no-repeat,
         url(../img/human-2.svg) right bottom no-repeat,
-        url(../img/noise-bg.png) left top no-repeat,
-        var(--background-color)
+        url(../img/noise-bg.svg) center center repeat,
+        var(--background-color);
+
+        background-size: auto, auto, cover, auto;
     }
 }
 
+@media (max-width: 768px) {
+    .human-image {
+      display: none;
+    }
+  }
+  
 .home-title::before
 {
     content: url(../img/stars.svg);
