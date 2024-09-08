@@ -3,54 +3,42 @@ const mongoose = require('mongoose')
 
 exports.dashboard = async (req, res) => {
 
-    let perPage = 12
-    let page = req.query.page || 1
-    
+    let perPage = 12;
+    let page = req.query.page || 1;
+  
     const locals = {
-        title: 'Dashboard',
-        description: 'Simple Notes App created with NodeJS, Express and MongoDB.'
-    }
-
+      title: "Dashboard",
+      description: "Free NodeJS Notes App.",
+    };
+  
     try {
-    
-        const notes = await Note.aggregate([
-            {
-                $sort: {
-                    createdAt: -1,
-                }
-            },
-            {
-                $match: {
-                    user: mongoose.Types.ObjectId(req.user.id)
-                }
-            },
-            {
-                $project: {
-                    title: {
-                        $substr: ['$title', 0, 30]
-                    },
-                    body: {
-                        $substr: ['$body', 0, 100]
-                    }
-                }
-            }
+      // Mongoose "^7.0.0 Update
+      const notes = await Note.aggregate([
+        { $sort: { updatedAt: -1 } },
+        { $match: { user: new mongoose.Types.ObjectId(req.user.id) } },
+        {
+          $project: {
+            title: { $substr: ["$title", 0, 30] },
+            body: { $substr: ["$body", 0, 100] },
+          },
+        }
         ])
-        .skip(perPage * page - perPage)
-        .limit(perPage)
-        .exec(function (err, notes) {
-            Note.count().exec(function (err, count) {
-                if(err) return next(err)
-
-                res.render('dashboard/index', {
-                    userName: req.user.firstName,
-                    locals,
-                    notes,
-                    layout: '../views/layouts/dashboard',
-                    current: page,
-                    pages: Math.ceil(count / perPage)
-                })
-            })
-        })
+      .skip(perPage * page - perPage)
+      .limit(perPage)
+      .exec(); 
+  
+      const count = await Note.countDocuments({
+        user: new mongoose.Types.ObjectId(req.user.id)
+      });
+  
+      res.render('dashboard/index', {
+        userName: req.user.firstName,
+        locals,
+        notes,
+        layout: "../views/layouts/dashboard",
+        current: page,
+        pages: Math.ceil(count / perPage)
+      });
 
     } catch (err) {
         console.log(err)
@@ -77,8 +65,67 @@ exports.dashboardUpdateNote = async(req, res) => {
             { _id: req.params.id },
             { title: req.body.title,  body: req.body.body}
     ).where({user: req.user.id})
-    res.redirect('/dasboard')
+    res.redirect('/dashboard')
     } catch(err) {
         console.log(err)
+    }
+}
+
+exports.dashboardDeleteNote = async(req, res) => {
+    try {
+        await Note.deleteOne(
+            { _id: req.params.id },
+        ).where({user: req.user.id})
+        res.redirect('/dashboard')
+    } catch (err) {
+        console.log(err)
+    }
+}
+
+exports.dashboardAddNote = async(req, res) => {
+    res.render('dashboard/add', {
+        layout: '../views/layouts/dashboard'
+    })
+}
+
+exports.dashboardSubmitNote = async(req, res) => {
+    try {
+        req.body.user = req.user.id;
+        await Note.create(
+            req.body
+        )
+        res.redirect('/dashboard')
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+exports.dashboardSearch = async(req, res) => {
+    try {
+        res.render('dashboard/search', {
+            searchResults: '',
+            layout: '../views/layouts/dashboard'
+        })
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+exports.dashboardSearchSubmit = async(req, res) => {
+    try {
+        let searchTerm = req.body.searchTerm
+        const searchNoSpChar = searchTerm.replace(/[^a-zA-Z0-9 ]/g, "")
+        const searchResults = await Note.find({
+            $or: [
+                {title: new RegExp(searchNoSpChar, 'i')},
+                {body: new RegExp(searchNoSpChar, 'i')}
+                ]
+        }).where({user: req.user.id})
+        res.render('dashboard/search', {
+            searchResults,
+            layout: '../views/layouts/dashboard'
+        })
+    } catch (err) {
+        console.log(err);
     }
 }
