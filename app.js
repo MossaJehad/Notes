@@ -47,6 +47,7 @@ app.set('view engine', 'ejs')
 
 app.use((req, res, next) => {
     res.locals.currentRoute = req.path.replace(/\/$/, '') || '/';
+    res.locals.user = req.user || null;
     next();
 })
 

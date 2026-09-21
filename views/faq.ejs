@@ -61,7 +61,11 @@
 
         <div class="text-center mt-5 pt-3">
             <p class="fs-5 mb-3">Ready to start taking notes?</p>
-            <a href="/auth/google" class="btn btn-primary btn-lg">Get Started Free</a>
+            <% if (typeof user !== 'undefined' && user) { %>
+                <a href="/dashboard" class="btn btn-primary btn-lg">Go to Dashboard</a>
+            <% } else { %>
+                <a href="/auth/google" class="btn btn-primary btn-lg">Get Started Free</a>
+            <% } %>
         </div>
     </div>
 </div>

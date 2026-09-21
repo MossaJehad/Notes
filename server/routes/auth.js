@@ -33,9 +33,12 @@ passport.use(new GoogleStrategy({
     }
 ))
 
-router.get('/auth/google', 
-    passport.authenticate('google', { scope: ["email", "profile"] })
-)
+router.get('/auth/google', (req, res, next) => {
+    if (req.user) {
+        return res.redirect('/dashboard');
+    }
+    next();
+}, passport.authenticate('google', { scope: ["email", "profile"] }))
 
 router.get('/google/callback',
     passport.authenticate('google', {

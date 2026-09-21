@@ -8,9 +8,15 @@
                 <p class="fs-4 mb-4">
                     Notes is a simple to use free note taking app
                 </p>
-                <a class="btn btn-primary btn-lg" href="/auth/google">
-                    Try Notes, it's free!
-                </a>
+                <% if (typeof user !== 'undefined' && user) { %>
+                    <a class="btn btn-primary btn-lg" href="/dashboard">
+                        Go to Dashboard
+                    </a>
+                <% } else { %>
+                    <a class="btn btn-primary btn-lg" href="/auth/google">
+                        Try Notes, it's free!
+                    </a>
+                <% } %>
             </div>
         </div>
     </main>
