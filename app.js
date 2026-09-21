@@ -13,6 +13,8 @@ const MongoStore = require('connect-mongo')
 const app = express()
 const port = process.env.PORT || 3000
 
+app.set('trust proxy', 1)
+
 app.use(session({
     secret: 'keyboard cat',
     resave: false,
