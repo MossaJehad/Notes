@@ -1,11 +1,18 @@
 <% let date = new Date() %>
-<div id="footer" class="container-fluid" bis_skin_checked="1">
+<div id="footer" class="container-fluid mt-auto">
     <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-2 border-top">
-      <div class="col-md-4 d-flex align-items-center" bis_skin_checked="1">
-        <a href="/" class="mb-1 me-2 mb-md-0 text-body-secondary text-decoration-none lh-1 fw-bold fs-6">
+      <div class="col-md-4 d-flex align-items-center">
+        <a href="/" class="mb-1 me-2 mb-md-0 text-primary text-decoration-none lh-1 fw-bold fs-6">
           Notes
         </a>
-        <span class="mb-1 fs-6 mb-md-0 text-body-secondary">© <%= date.getFullYear() %> Company, Inc</span>
+        <span class="mb-1 fs-6 mb-md-0 text-dark">© <%= date.getFullYear() %> Notes, Inc</span>
       </div>
+
+      <ul class="nav col-md-6 justify-content-end list-unstyled d-flex mb-0">
+        <li class="ms-3"><a class="nav-link p-0 <%= (typeof currentRoute !== 'undefined' && currentRoute === '/') ? 'link-secondary' : 'link-dark' %>" href="/">Home</a></li>
+        <li class="ms-3"><a class="nav-link p-0 <%= (typeof currentRoute !== 'undefined' && currentRoute === '/features') ? 'link-secondary' : 'link-dark' %>" href="/features">Features</a></li>
+        <li class="ms-3"><a class="nav-link p-0 <%= (typeof currentRoute !== 'undefined' && (currentRoute === '/faq' || currentRoute === '/faqs')) ? 'link-secondary' : 'link-dark' %>" href="/faq">FAQs</a></li>
+        <li class="ms-3"><a class="nav-link p-0 <%= (typeof currentRoute !== 'undefined' && currentRoute === '/about') ? 'link-secondary' : 'link-dark' %>" href="/about">About</a></li>
+      </ul>
     </footer>
 </div>

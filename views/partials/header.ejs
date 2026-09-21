@@ -5,10 +5,10 @@
       </a>
 
       <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-        <li><a href="/" class="nav-link px-2 link-secondary">Home</a></li>
-        <li><a href="/features" class="nav-link px-2 link-dark">Features</a></li>
-        <li><a href="/faq" class="nav-link px-2 link-dark">FAQs</a></li>
-        <li><a href="/about" class="nav-link px-2 link-dark">About</a></li>
+        <li><a href="/" class="nav-link px-2 <%= (typeof currentRoute !== 'undefined' && currentRoute === '/') ? 'link-secondary' : 'link-dark' %>">Home</a></li>
+        <li><a href="/features" class="nav-link px-2 <%= (typeof currentRoute !== 'undefined' && currentRoute === '/features') ? 'link-secondary' : 'link-dark' %>">Features</a></li>
+        <li><a href="/faq" class="nav-link px-2 <%= (typeof currentRoute !== 'undefined' && (currentRoute === '/faq' || currentRoute === '/faqs')) ? 'link-secondary' : 'link-dark' %>">FAQs</a></li>
+        <li><a href="/about" class="nav-link px-2 <%= (typeof currentRoute !== 'undefined' && currentRoute === '/about') ? 'link-secondary' : 'link-dark' %>">About</a></li>
       </ul>
 
       <div class="col-md-3 text-end" bis_skin_checked="1">
@@ -16,4 +16,19 @@
         <a href="/auth/google" type="button" class="btn btn-primary">Sign-up</a>
       </div>
     </header>
+    <script>
+      (function() {
+        const currentPath = window.location.pathname.replace(/\/$/, '') || '/';
+        document.querySelectorAll('header .nav-link').forEach(link => {
+          const href = link.getAttribute('href');
+          if (href === currentPath || (href === '/faq' && currentPath === '/faqs')) {
+            link.classList.remove('link-dark');
+            link.classList.add('link-secondary');
+          } else if (href && href.startsWith('/')) {
+            link.classList.remove('link-secondary');
+            link.classList.add('link-dark');
+          }
+        });
+      })();
+    </script>
   </div>
