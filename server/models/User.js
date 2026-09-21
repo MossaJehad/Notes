@@ -15,11 +15,11 @@ const UserSchema = new Schema({
     },
     lastName: {
         type: String,
-        required: true
+        default: ''
     },
     profileImage: {
         type: String,
-        required: true
+        default: 'https://cdn-icons-png.flaticon.com/512/149/149071.png'
     },
     updatedAt: {
         type: Date,

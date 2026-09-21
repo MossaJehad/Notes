@@ -53,6 +53,17 @@ app.get('*', function(req, res){
     res.status(404).render('404')
 })
 
+app.use((err, req, res, next) => {
+    console.error('Express Error:', err);
+    res.status(500).send(`
+        <div style="font-family: sans-serif; padding: 2rem; max-width: 600px; margin: 0 auto; text-align: center;">
+            <h2>Server Error</h2>
+            <p>${err.message || 'An unexpected error occurred.'}</p>
+            <a href="/" style="display: inline-block; margin-top: 1rem; padding: 0.5rem 1rem; background: #0d6efd; color: white; text-decoration: none; border-radius: 4px;">Return Home</a>
+        </div>
+    `);
+});
+
 if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
     app.listen(port, () => {
         console.log(`App listening on port ${port}`)

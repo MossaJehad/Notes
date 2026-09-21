@@ -12,10 +12,10 @@ passport.use(new GoogleStrategy({
     async function (accessToken, refreshToken, profile, done) {
         const newUser = {
             googleId: profile.id,
-            displayName: profile.displayName,
-            firstName: profile.name.givenName,
-            lastName: profile.name.familyName,
-            profileImage: profile.photos[0].value,
+            displayName: profile.displayName || 'Notes User',
+            firstName: (profile.name && profile.name.givenName) || profile.displayName || 'User',
+            lastName: (profile.name && profile.name.familyName) || '',
+            profileImage: (profile.photos && profile.photos[0]) ? profile.photos[0].value : 'https://cdn-icons-png.flaticon.com/512/149/149071.png',
         }
         try {
             let user = await User.findOne({googleId: profile.id})
@@ -59,12 +59,13 @@ router.get('/logout', (req, res) => {
 })
 
 passport.serializeUser(function(user, done) {
-    done(null, user)
+    done(null, user.id || user._id)
 })
 
 passport.deserializeUser(async (id, done) => {
     try {
-      const user = await User.findById(id);
+      const userId = (id && typeof id === 'object') ? (id._id || id.id) : id;
+      const user = await User.findById(userId);
       done(null, user);
     } catch (err) {
       done(err, null);
